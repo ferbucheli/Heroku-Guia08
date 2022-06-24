@@ -36,6 +36,7 @@ document.querySelector('select').addEventListener('change', (event) => {
     .then(response => response.json())
     .then(data => {
       const res = data.frases
+      console.log('Frases')
       frasesFiltradas = res.filter(frase => frase.id_autor == event.target.value)
       for(let f of frasesFiltradas){
         const plantilla = `
