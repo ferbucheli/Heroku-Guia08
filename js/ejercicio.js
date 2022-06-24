@@ -1,3 +1,10 @@
+const cleanFrases = () => {
+	const frases = document.getElementById('frases');
+
+	while (frases.hasChildNodes()) {
+		frases.removeChild(frases.firstChild);
+	}
+}
 
 let cargarDatos = () => {
   fetch('https://dataserverdaw.herokuapp.com/escritores/xml')
@@ -22,12 +29,31 @@ window.addEventListener('DOMContentLoaded', (event) => {
   cargarDatos()
 });
 
-select.addEventListener('DOMContentLoaded', (event) => {
+
+document.querySelector('select').addEventListener('change', (event) => {
+  cleanFrases()
   fetch("https://dataserverdaw.herokuapp.com/escritores/frases")
     .then(response => response.json())
     .then(data => {
-      const res = JSON.parse(data, 'application/json')
-      let
+      const res = data.frases
+      frasesFiltradas = res.filter(frase => frase.id_autor == event.target.value)
+      for(let f of frasesFiltradas){
+        const plantilla = `
+        <div class="col-lg-3">
+          <div class="test-inner ">
+            <div class="test-author-thumb d-flex">
+              <div class="test-author-info">
+                <h4>${f.id_autor}</h4>                                            
+              </div>
+            </div>
+            <span>${f.texto}</span>
+             <i class="fa fa-quote-right"></i>
+          </div>
+         </div>
+        `
+        document.querySelector('#frases').innerHTML += plantilla
+      }
+
     })
     .catch(console.error);
 
